@@ -1,6 +1,6 @@
 from urllib.parse import _NetlocResultMixinStr
 from django.shortcuts import render
-
+from .models import Project
 projectsList =[
     {
         'id':'1',
@@ -25,13 +25,12 @@ projectsList =[
 ]
 
 def projects(request):
-    context={'projects':projectsList}
+    projects=Project.objects.all
+    context={'projects':projects}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
-    projectObj=None
-    for i in projectsList:
-        if i['id']==pk:
-            projectObj=i
-    context={'project':projectObj}
+    projectObj=Project.objects.get(id=pk)
+    tags=projectObj.tags.all()
+    context={'project':projectObj, 'tags':tags}
     return render(request, 'projects/single-project.html', context)   
