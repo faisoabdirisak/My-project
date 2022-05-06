@@ -1,28 +1,7 @@
-from urllib.parse import _NetlocResultMixinStr
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Project
-projectsList =[
-    {
-        'id':'1',
-        'title':'GithubSearch',
-        'description':'uses to search github profile'
-    },
-     {
-        'id':'2',
-        'title':'GithubSearch2',
-        'description':'uses to search github profile'
-    }, 
-    {
-        'id':'3',
-        'title':'GithubSearch3',
-        'description':'uses to search github profile'
-    },
-     {
-        'id':'4',
-        'title':'GithubSearch4',
-        'description':'uses to search github profile'
-    }
-]
+from .forms import ProjectForm
+
 
 def projects(request):
     projects=Project.objects.all
@@ -34,3 +13,34 @@ def project(request, pk):
     tags=projectObj.tags.all()
     context={'project':projectObj, 'tags':tags}
     return render(request, 'projects/single-project.html', context)   
+
+def createProject(request):
+    form=ProjectForm()
+
+    if request.method=='POST':
+        form=ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('projects')
+    context={'form':form}
+    return render(request, 'projects/project_form.html', context)
+
+def updateProject(request, pk):
+    project=Project.objects.get(id=pk)
+    form=ProjectForm(instance=project)
+
+    if request.method=='POST':
+        form=ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect('projects')
+    context={'form':form}
+    return render(request, 'projects/project_form.html', context)
+
+def deleteProject(request,pk):
+    project = Project.objects.get(id=pk)
+    if request.method =='POST':
+        project.delete()
+        return redirect('projects')
+    context={'object': project}
+    return render(request, 'projects/delete.html', context)    
