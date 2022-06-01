@@ -19,7 +19,7 @@
         <td>{{project.vote_total}}</td>
         <td>{{project.vote_ratio}}</td>
         <td>{{project.created}}</td>
-        <td><a href="{% url 'projects' project.id%}">View</a></td>
+        <td><a href="{% url 'project' project.id%}">View</a></td>
         <td><a href="{% url 'update-project' project.id %}">Edit</a></td>
         <td><a href="{% url 'delete-project' project.id %}">Delete</a></td>
     </tr>
@@ -55,7 +55,7 @@
     <tr>
           <div class="column">
             <div class="card project">
-              <a href="{% url 'projects' project.id %}" class="project">
+              <a href="{% url 'project' project.id %}" class="project">
                 <img class="project__thumbnail" src="{{project.featured_image.url}}" alt="project thumbnail" />
                 <div class="card__body">
                   <h3 class="project__title"> {{project.title}}</h3>
